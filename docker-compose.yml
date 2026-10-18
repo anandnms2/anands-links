@@ -1,5 +1,6 @@
 # Anands Links — Linkwarden fork (orange / black / grey), Authentik SSO.
-# Deploy:  cp .env.anands.example .env  → fill secrets → docker compose up -d
+# Deploy:  cp .env.anands.example .env  → fill secrets → docker compose up -d --build
+#          (first build is slow and needs ~4 GB RAM: Rust monolith + Next.js)
 # Coolify: use this file as a Docker Compose resource, put the domain on the
 #          `anands-links` service (port 3000), and paste .env values in Environment.
 services:
@@ -28,9 +29,8 @@ services:
       - anands_links_meili:/meili_data
 
   anands-links:
-    # Pre-built by GitHub Actions; `build` lets you build locally instead:
-    #   docker compose build
-    image: ghcr.io/anandnms2/anands-links:latest
+    # Built from source on the server (no registry needed).
+    image: anands-links:local
     build:
       context: .
       dockerfile: Dockerfile
