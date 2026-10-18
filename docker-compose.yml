@@ -27,6 +27,12 @@ services:
       MEILI_NO_ANALYTICS: "true"
     volumes:
       - anands_links_meili:/meili_data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:7700/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
   anands-links:
     # Built from source on the server (no registry needed).
@@ -40,7 +46,7 @@ services:
       postgres:
         condition: service_healthy
       meilisearch:
-        condition: service_started
+        condition: service_healthy
     ports:
       - "${LINKS_PORT:-3000}:3000"
     environment:
@@ -61,6 +67,13 @@ services:
       # NEXT_PUBLIC_CREDENTIALS_ENABLED: "false"
     volumes:
       - anands_links_data:/data/data
+    healthcheck:
+      # Migrations run on start, so allow a long warm-up before failures count
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:3000/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
 
 volumes:
   anands_links_pg:
