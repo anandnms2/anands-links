@@ -278,6 +278,7 @@ const Section = ({
               <PageHeader
                 icon={"bi-clock-history"}
                 title={t("recent_links")}
+                description="Recently saved, archived and indexed for search."
                 sm
               />
             </div>

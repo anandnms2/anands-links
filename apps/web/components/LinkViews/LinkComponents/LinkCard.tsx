@@ -115,8 +115,22 @@ function LinkCard({
                   />
                 ) : link.preview === "unavailable" ? (
                   <div
-                    className={`bg-gray-50 ${imageHeightClass} bg-opacity-80`}
-                  ></div>
+                    className={`${imageHeightClass} flex items-end px-3 pb-2 text-[11px] tracking-wide uppercase text-white/90`}
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #f68712 0%, #7a3a00 100%)",
+                    }}
+                  >
+                    {link.url
+                      ? (() => {
+                          try {
+                            return new URL(link.url).host.replace(/^www\./, "");
+                          } catch {
+                            return "";
+                          }
+                        })()
+                      : ""}
+                  </div>
                 ) : (
                   <div
                     className={`${imageHeightClass} bg-opacity-80 skeleton rounded-none`}
@@ -148,6 +162,24 @@ function LinkCard({
               )}
 
               {show.link && <LinkTypeBadge link={link} />}
+
+              {link.tags?.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {link.tags.slice(0, 3).map((tag, i) => (
+                    <span
+                      key={tag.id}
+                      className={cn(
+                        "text-[11px] px-2 py-0.5 rounded-full",
+                        i === 0
+                          ? "bg-primary/15 text-primary"
+                          : "bg-base-200 text-neutral"
+                      )}
+                    >
+                      {tag.name}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             {(show.collection || show.date) && (

@@ -110,6 +110,20 @@ export default function SidebarShell({
             "p-2 fixed inset-y-0 left-0 z-40 shadow-lg"
         )}
       >
+        <div
+          className={cn(
+            "shrink-0 flex items-center gap-2.5 pt-2 pb-1",
+            collapsed ? "justify-center" : "px-2"
+          )}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/icon-small-150x150.png" alt="" className="h-7 w-7" />
+          {!collapsed && (
+            <span className="text-lg font-bold tracking-tight">
+              Anands <span className="text-primary">Links</span>
+            </span>
+          )}
+        </div>
         {children({
           collapsed,
           toggle,
