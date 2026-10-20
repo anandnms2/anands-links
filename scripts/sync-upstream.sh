@@ -52,7 +52,9 @@ git merge-index -o git-merge-one-file -a >/dev/null 2>&1 || true
 
 # Branding-owned files always stay ours.
 for p in "${PROTECTED[@]}"; do
-  git cat-file -e "HEAD:$p" 2>/dev/null && git checkout -q HEAD -- "$p" || true
+  git rm -rfq --cached --ignore-unmatch -- "$p"   # drop any merge stages for it
+  rm -rf -- "$p"
+  if git cat-file -e "HEAD:$p" 2>/dev/null; then git checkout -q HEAD -- "$p"; fi
 done
 
 # Generated customizations: re-derive from the new upstream files.
